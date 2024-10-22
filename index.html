@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="position.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>みんなの活字化広場</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f3e6;
+            color: #333;
+        }
+
+        header {
+            background-color: #3d3d3d;
+            color: #f4f4f4;
+            width: 100%;
+            text-align: center;
+            padding: 30px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-bottom: 3px solid #d4af37;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column; /* スマホ版では縦に並べる */
+            width: 100%;
+        }
+
+        nav button {
+            margin: 10px 0; /* 縦方向の余白 */
+            padding: 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #0b0c0b;
+            color: rgb(236, 216, 67);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        nav button:hover {
+            background-color: #585441;
+            transform: scale(1.05);
+        }
+
+        .auth-buttons {
+            display: flex;
+            flex-direction: center; /* 縦に並べる */
+            gap: 10px;
+            margin: 10px 0; /* 縦方向の余白 */
+        }
+
+        .auth-buttons button {
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background-color: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .auth-buttons button:hover {
+            background-color: #ee5757;
+            border-color: #f2605b;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 2rem;
+            background-color: #fafafa;
+        }
+
+        .image-diagonal {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: 300px; /* 高さを調整 */
+            margin: 2rem 0;
+            border: 2px solid #d4af37;
+        }
+
+        .image-diagonal img {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-diagonal img:nth-child(1) {
+            top: 0;
+            left: 0;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+        }
+
+        .image-diagonal img:nth-child(2) {
+            top: 0;
+            right: 0;
+            clip-path: polygon(100% 0, 100% 100%, 0 100%);
+        }
+
+        .text-box-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: -10rem 0 10rem 0; /* 調整 */
+            display: flex;
+            flex-direction: column; /* 縦に並べる */
+            align-items: center;
+        }
+
+        .text-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem; /* 調整 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%; /* 幅を調整 */
+            margin: 1rem 0; /* 縦方向の余白 */
+        }
+
+        .text-box img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+            border: 2px solid #d4af37;
+        }
+
+        .text-box h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-top: 0;
+            color: #3d3d3d;
+        }
+
+        .text-box p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em; 
+            }
+
+            nav button {
+                padding: 10px; 
+                font-size: 0.9em; 
+            }
+
+            .text-box {
+                padding: 1rem; 
+            }
+        }
+    </style>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDN9KQ50hwjlzFNc26aMOCS0H06JwggY68",
+            authDomain: "honkoku-hiroba-21400.firebaseapp.com",
+            projectId: "honkoku-hiroba-21400",
+            storageBucket: "honkoku-hiroba-21400.appspot.com",
+            messagingSenderId: "909469448032",
+            appId: "1:909469448032:web:8c62f7f2a978c711cd9005",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+    </script>
+</head>
+<body>
+    <header>
+        <h1>ようこそ！！</h1>
+            <h1>みんなの活字化広場へ</h1>
+        <nav>
+            <button class="nav-btn" onclick="location.href=''">PC版サイトへ</button>
+            <button class="nav-btn" onclick="location.href='support.html'">お問い合わせ</button>
+            <button class="nav-btn" onclick="location.href='itsweb.html'">本WEBサイトについて</button>
+            <button class="nav-btn" onclick="location.href='guide.html'">ご登録案内</button>
+        </nav>
+    </header>
+    <div class="auth-buttons">
+        <button class="register-btn" onclick="location.href='register2.html'">新規会員登録</button>
+        <button class="login-btn" onclick="location.href='login.html'">ログイン</button>
+    </div>
+    <main>
+        <div class="image-diagonal">
+            <img src="２２２２.png" alt="説明1">
+            <img src="one.png" alt="説明2">
+        </div>
+        <h1>〜さまざまな歴史資料を読み解こう！！〜</h1>
+        <p>このWEBサイトでは、管理者が日々歴史資料を公開しています。その価値ある歴史資料で気になるものや興味のある人物の書物を見つけて活字化作業に取り組んでください！
+            活字化するのにWordなどのファイル提出は必要なく画像をクリックするだけで、使いやすいデザインを採用した入力ボックスが表示されます。ぜひ、このプロジェクトに取り組んで
+            活字化の楽しさを味わってみてください！！
+        </p>
+       
+
+    </main>
+    <footer>
+        <p>&copy; 2024 みんなの活字化広場</p>
+    </footer>
+    </body>
+    </html>
