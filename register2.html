@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="position.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規会員登録</title>
+    <link rel="stylesheet" href="styles/style.css">
+    
+    <meta name="google-signin-client_id" content="909469448032-9h4c3cuurfc3m1qonogamd1a97nj93cg.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center; 
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        main {
+            flex: 1;
+            margin-top: 150px; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%; /* 幅を90%にして余白を調整 */
+            max-width: 400px; /* 最大幅は400px */
+        }
+
+        form h1 {
+            font-size: 1.6em; /* ヘッダーのフォントサイズを調整 */
+            margin-bottom: 15px;
+            color: #007BFF;
+        }
+
+        form input {
+            margin: 10px 0;
+            padding: 12px; /* パディングを調整 */
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            margin-top: 15px;
+            padding: 12px; /* パディングを調整 */
+            font-size: 1.1em; /* フォントサイズを調整 */
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%; /* ボタン幅を100%に */
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 10px 0; /* ヘッダーのパディングを調整 */
+            }
+            form h1 {
+                font-size: 1.5em; /* ヘッダーのフォントサイズを調整 */
+            }
+            form input {
+                font-size: 0.9em; /* 入力フィールドのフォントサイズを調整 */
+            }
+            form button {
+                font-size: 1em; /* ボタンのフォントサイズを調整 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>新規会員登録</h1>
+       <p></p>
+    </header>
+    <main>
+        <form id="registerForm">
+            <input type="text" id="name" placeholder="性・名 or Last,First" required>
+            <input type="email" id="email" placeholder="メールアドレス（Email Address）" required>
+            <input type="password" id="password" placeholder="パスワード（Password）" required>
+            <button type="submit">登録（Sign Up）</button>
+        </form>
+    </main>
+    <script type="module">
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js';
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDN9KQ50hwjlzFNc26aMOCS0H06JwggY68",
+            authDomain: "honkoku-hiroba-21400.firebaseapp.com",
+            projectId: "honkoku-hiroba-21400",
+            storageBucket: "honkoku-hiroba-21400.appspot.com",
+            messagingSenderId: "909469448032",
+            appId: "1:909469448032:web:8c62f7f2a978c711cd9005",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(userCredential.user, { displayName: name });
+                alert('登録が成功しました！');
+                window.location.href = 'member.html';
+            } catch (error) {
+                alert(`エラー: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="position.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>みんなの活字化広場</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1e2; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden; /* 横スクロールを防止 */
+}
+
+main {
+    margin-top: 40px; 
+    padding: 20px;
+    width: 100%; /* スマホ版では100%に設定 */
+    box-sizing: border-box; /* パディングを含む幅を計算 */
+}
+
+.section {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%; /* スマホ版では100%に設定 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    box-sizing: border-box; /* パディングを含む幅を計算 */
+}
+
+.vertical-links {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+    width: 100%; 
+    margin-bottom: 20px;
+}
+
+.button {
+    display: block;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #e8800a;
+    color: rgb(14, 13, 13);
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%; 
+    font-family: 'Georgia', serif; 
+    transition: background-color 0.3s, transform 0.3s; /* スムーズなホバーエフェクト */
+}
+
+.button:hover {
+    background-color: #d07e0b; /* ホバー時の色 */
+    transform: translateY(-2px); /* ホバー時に少し上に移動 */
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px; 
+    width: 100%; 
+}
+
+.rainbow-button {
+    display: block;
+    width: 100%; 
+    height: 100px; 
+    text-align: center;
+    line-height: 100px; 
+    color: rgb(18, 18, 18); 
+    text-decoration: none; 
+    border-radius: 15px; 
+    font-size: 20px; 
+    transition: transform 0.3s, background 0.3s; 
+}
+.join-project-box {
+            background: #7e5837;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            width: 100%;
+            text-align: center;
+            
+            
+        }
+
+        .join-project-link {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+.rainbow-button:nth-child(1) {
+    background: linear-gradient(135deg, #ff0000, #ff7300);
+}
+
+.rainbow-button:nth-child(2) {
+    background: linear-gradient(135deg, #ffea00, #33cc00);
+}
+
+.rainbow-button:nth-child(3) {
+    background: linear-gradient(135deg, #00aaff, #a000ff);
+}
+
+.rainbow-button:hover {
+    transform: scale(1.05); 
+    filter: brightness(1.1); 
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+        margin-bottom: 5px; 
+    }
+
+    .header-right {
+        margin-top: 10px;
+    }
+
+    .section {
+        width: 100%; 
+    }
+
+    .button {
+        width: 100%; 
+    }
+
+    .button-container {
+        flex-direction: column; 
+        gap: 10px; 
+    }
+}
+
+    </style>
+
+</style>
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>みんなの活字化広場　version24.4🚀</h1>
+        <div class="header-right">
+            <p id="welcomeMessage">ようこそ、会員様！</p>
+            <button id="logout">ログアウト</button>
+        </div>
+    </header>
+    <main>
+        <div class="section join-project-box">
+            <a href="project.html" class="join-project-link">プロジェクトに参加する</a>
+        </div>
+
+        <div class="vertical-links">
+            <a href="upload.html" class="button">画像データをアップロードする</a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ea21002@wesleyan.ac.jp,yoshino@wesleyan.ac.jp&su=フィードバック&body=【お名前】%0A【メールアドレス】%0A【ご意見】%0A%0A以下にフィードバックを記入してください。" class="button">フィードバックを送る</a>
+            <a href="version.html" class="button">WEBサイトについて for Question（サポートセンター）</a>
+            <a href="webusing.html" class="button">ご利用案内（各種操作方法）</a>
+        </div>
+
+        <div class="section announcement-box">
+            <h2>お知らせ</h2>
+            <ul id="announcement-list"></ul>
+            <div style="text-align: right;">
+                <a href="announcements.html">お知らせ一覧へ</a> 
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="allsarch.html" class="rainbow-button">資料検索システム</a>
+            <a href="https://yuyawesleyan.github.io/MinnaTextHub/" class="rainbow-button">PC版サイトへ移動</a>
+            <a href="#" class="rainbow-button">準備中</a>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, orderBy, addDoc, serverTimestamp, limit } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDN9KQ50hwjlzFNc26aMOCS0H06JwggY68",
+            authDomain: "honkoku-hiroba-21400.firebaseapp.com",
+            projectId: "honkoku-hiroba-21400",
+            storageBucket: "honkoku-hiroba-21400.appspot.com",
+            messagingSenderId: "909469448032",
+            appId: "1:909469448032:web:8c62f7f2a978c711cd9005",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        let currentUser = null;
+
+        async function loadAnnouncements() {
+            try {
+                const announcementList = document.getElementById('announcement-list');
+                if (announcementList) {
+                    announcementList.innerHTML = ''; 
+                    const querySnapshot = await getDocs(
+                        query(collection(db, 'announcements'), orderBy('timestamp', 'desc'), limit(5))
+                    );
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const listItem = document.createElement('li');
+                        listItem.textContent = data.content;
+                        announcementList.appendChild(listItem);
+                    });
+                }
+            } catch (error) {
+                console.error("データ取得エラー: ", error);
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                console.log("ログイン中のユーザー:", user.displayName);
+                await logUserLogin();
+                
+                const welcomeMessage = document.getElementById('welcomeMessage');
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = `ようこそ、${user.displayName || '会員様'}さん！`;
+                }
+
+                loadAnnouncements();
+            } else {
+                console.log("ユーザーがログインしていません");
+                window.location.href = 'login.html'; 
+            }
+        });
+
+        const logUserLogin = async () => {
+            if (currentUser) {
+                const loginsRef = collection(db, 'logins');
+                await addDoc(loginsRef, {
+                    username: currentUser.displayName,
+                    timestamp: serverTimestamp()
+                });
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutButton = document.getElementById('logout');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', async () => {
+                    try {
+                        await signOut(auth);
+                        window.location.href = 'login.html'; 
+                    } catch (error) {
+                        console.error("ログアウトエラー: ", error);
+                    }
+                });
+            }
+        });
+    </script>
+
+    <footer class="footer">
+        <p>© 2024 みんなの活字化広場 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
+

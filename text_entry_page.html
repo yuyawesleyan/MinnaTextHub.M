@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="position.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像テキスト入力</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            overflow: auto; /* 全体がスクロール可能に */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row; /* 横に並ぶように変更 */
+            gap: 20px;
+        }
+
+        .text-entry {
+            flex: 1; /* 入力エリアが可能な限り広がる */
+            font-size: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            box-sizing: border-box; 
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: #ddd;
+            border-radius: 8px;
+            height: 100vh; /* モバイルに合わせて高さを調整 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0; /* 画像エリアが縮まないように */
+            width: 300px; /* 画像エリアの幅を固定 */
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center;
+            position: absolute;
+        }
+
+        .image-container img:active {
+            cursor: grabbing;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .tab {
+            padding: 10px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 2px solid #007bff;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .input-group-checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group-checkbox label {
+            margin-left: 8px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #007bff;
+            transition: background-color 0.3s;
+            width: 100%; /* ボタンを全幅にする */
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-link {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .button-link:hover {
+            background-color: #218838;
+        }
+
+        #text-input {
+            font-size: 20px;
+            writing-mode: vertical-rl; 
+            height: 400px; 
+            width: 100%; 
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none; 
+            overflow-y: auto;
+            vertical-align: top;  
+            padding-top: 0;  
+            box-sizing: border-box;  
+        }
+
+        /* モバイル用のスタイル */
+        @media (max-width: 600px) {
+            .image-container {
+                height: 40vh; /* モバイルでの高さを調整 */
+                width: 100%; /* モバイルで幅を全幅に */
+            }
+            .text-entry {
+                padding: 10px; /* パディングを調整 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>活字化テキスト入力</h1>
+    <p>原稿で不明文字や原稿の劣化によりわからない文字は「⬜︎」と入力してください。
+    ※資料名は必ず入力してください</p>
+    <div class="container">
+        <div class="text-entry">
+            <div class="tabs">
+                <div class="tab active" data-tab="text-entry">活字化入力</div>
+                <div class="tab" data-tab="bibliography">書誌情報</div>
+                <div class="tab" data-tab="history">編集者履歴</div>
+                <div class="tab" data-tab="legend">凡例</div>
+            </div>
+            <div id="text-entry" class="tab-content active">
+                <div class="input-group">
+                    <label for="text-input">入力内容:</label>
+                    <textarea id="text-input" rows="4" style="resize: none; border: 1px solid #ccc; border-radius: 8px; padding: 10px; width: 100%; box-sizing: border-box;">
+差出人住所: 
+差出人氏名:
+形状: 
+枚数: 
+                    </textarea>
+                </div>
+                <div class="input-group-checkbox">
+                    <input id="request-correction" type="checkbox">
+                    <label for="request-correction">添削希望</label>
+                </div>
+                <button class="button" id="save-text-entry">保存</button>
+                <button class="button button-link" id="back-to-project">プロジェクト一覧に戻る</button>
+            </div>
+            <div id="bibliography" class="tab-content">
+                <div class="input-group">
+                    <label for="material-name">資料名（必須）※半角数字のみ！</label>
+                    <input id="material-name" type="text" placeholder="半角数字で入力してください">
+                </div>
+                <div class="input-group">
+                    <label for="responsible-person">担当者名</label>
+                    <input id="responsible-person" type="text" placeholder="担当者名を入力してください">
+                </div>
+                <div class="input-group">
+                    <label for="collection">所蔵</label>
+                    <input id="collection" type="text" placeholder="所蔵を入力してください">
+                </div>
+                <div class="input-group">
+                    <label for="title">Title</label>
+                    <input id="title" type="text" placeholder="Titleを入力してください">
+                </div>
+                <div class="input-group">
+                    <label for="date">Date</label>
+                    <input id="date" type="text" placeholder="Dateを入力してください">
+                </div>
+                <button class="button" id="save-bibliography">保存</button>
+            </div>
+            <div id="history" class="tab-content">
+                
+            </div>
+            <div id="legend" class="tab-content">
+                <div class="input-group">
+                    <label for="legend-input">凡例:</label>
+                    <textarea id="legend-input" placeholder="凡例を入力してください"></textarea>
+                </div>
+                <button class="button" id="save-legend">保存</button>
+            </div>
+        </div>
+        <div class="image-container">
+            <img id="image" src="" alt="Selected Image">
+        </div>
+    </div>
+
+    <script type="module">
+        // JavaScriptの部分はそのまま
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js';
+        import { getAuth, onAuthStateChanged, signInAnonymously } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDN9KQ50hwjlzFNc26aMOCS0H06JwggY68",
+            authDomain: "honkoku-hiroba-21400.firebaseapp.com",
+            projectId: "honkoku-hiroba-21400",
+            storageBucket: "honkoku-hiroba-21400.appspot.com",
+            messagingSenderId: "909469448032",
+            appId: "1:909469448032:web:8c62f7f2a978c711cd9005",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const image = document.getElementById('image');
+        const timeline = document.getElementById('timeline');
+        const tabs = document.querySelectorAll('.tab');
+        const imageURL = new URLSearchParams(window.location.search).get('image');
+
+        let currentUser = null;
+
+        const getDocumentId = (imageURL) => encodeURIComponent(imageURL);
+
+        const loadData = async () => {
+            const docRef = doc(db, "images", getDocumentId(imageURL));
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('text-input').value = data.textInput || '';
+                document.getElementById('material-name').value = data.materialName || '';
+                document.getElementById('responsible-person').value = data.responsiblePerson || ''; 
+                document.getElementById('collection').value = data.collection || '';
+                document.getElementById('title').value = data.title || '';
+                document.getElementById('date').value = data.date || '';
+                document.getElementById('legend-input').value = data.legendInput || '';
+                document.getElementById('request-correction').checked = data.requestCorrection || false;
+                updateHistory(data.history || []);
+            }
+        };
+
+        const saveData = async () => {
+            if (!currentUser) {
+                alert('ユーザーが認証されていません。');
+                return;
+            }
+
+            const docRef = doc(db, "images", getDocumentId(imageURL));
+            const docSnap = await getDoc(docRef);
+            const existingData = docSnap.exists() ? docSnap.data() : {};
+            const history = existingData.history || [];
+
+            history.push({ 
+                username: currentUser ? currentUser.displayName || 'ゲスト' : 'ゲスト', 
+                text: document.getElementById('text-input').value, 
+                timestamp: Date.now() 
+            });
+
+            const data = {
+                textInput: document.getElementById('text-input').value,
+                materialName: document.getElementById('material-name').value,
+                responsiblePerson: document.getElementById('responsible-person').value, 
+                collection: document.getElementById('collection').value,
+                title: document.getElementById('title').value,
+                date: document.getElementById('date').value,
+                legendInput: document.getElementById('legend-input').value,
+                requestCorrection: document.getElementById('request-correction').checked || false,
+                history: history
+            };
+
+            await setDoc(docRef, data, { merge: true });
+            await saveTimelineEntry({
+                username: currentUser ? currentUser.displayName || 'ゲスト' : 'ゲスト',
+                text: document.getElementById('text-input').value,
+                image: imageURL,
+                timestamp: Date.now()
+            });
+            alert('内容が保存され、タイムラインに投稿されました。');
+        };
+
+        const saveTimelineEntry = async (data) => {
+            const docRef = doc(collection(db, "timeline"));
+            await setDoc(docRef, data);
+        };
+
+        const loadTimeline = () => {
+            const q = query(collection(db, "timeline"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (querySnapshot) => {
+                timeline.innerHTML = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return `
+                        <div class="timeline-entry">
+                            <div class="username">${data.username}</div>
+                            <div class="timestamp">${new Date(data.timestamp).toLocaleString()}</div>
+                            ${data.image ? `<img src="${data.image}" alt="Timeline Image">` : ''}
+                            <div>${data.text}</div>
+                        </div>
+                    `;
+                }).join('');
+            });
+        };
+
+        const updateHistory = (history) => {
+            const historyContainer = document.getElementById('history');
+            historyContainer.innerHTML = history.map(entry => `
+                <div>
+                    <strong>${entry.username}</strong>: ${entry.text} (日時: ${new Date(entry.timestamp).toLocaleString()})
+                </div>
+            `).join('');
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelector('.tab.active').classList.remove('active');
+                tab.classList.add('active');
+
+                document.querySelector('.tab-content.active').classList.remove('active');
+                document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        document.getElementById('save-text-entry').addEventListener('click', saveData);
+        document.getElementById('save-bibliography').addEventListener('click', saveData);
+        document.getElementById('save-legend').addEventListener('click', saveData);
+
+        document.getElementById('back-to-project').addEventListener('click', () => {
+            window.history.go(-1);
+        });
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                currentUser = user;
+                console.log('ログイン中のユーザー:', currentUser.displayName || 'ゲスト');
+            } else {
+                signInAnonymously(auth)
+                    .then(() => {
+                        console.log('ゲストとしてログインしました。');
+                    })
+                    .catch((error) => {
+                        console.error('ログインエラー:', error);
+                    });
+            }
+        });
+
+        if (imageURL) {
+            image.src = imageURL;
+            loadData();
+        }
+
+        const imageElement = document.getElementById('image');
+        let scale = 1;
+        let startX, startY, initialX, initialY;
+        let isDragging = false;
+
+        imageElement.style.transform = `scale(${scale})`;
+        imageElement.style.left = '0px';
+        imageElement.style.top = '0px';
+
+        imageElement.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const zoomFactor = 0.05;  
+            scale += event.deltaY * -zoomFactor;
+            scale = Math.min(Math.max(0.5, scale), 4); 
+            imageElement.style.transform = `scale(${scale})`;
+        });
+
+        imageElement.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            startX = event.clientX;
+            startY = event.clientY;
+            initialX = imageElement.offsetLeft;
+            initialY = imageElement.offsetTop;
+            document.addEventListener('mousemove', handleDrag);
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                document.removeEventListener('mousemove', handleDrag);
+            });
+        });
+
+        function handleDrag(event) {
+            if (!isDragging) return;
+            const dx = event.clientX - startX;
+            const dy = event.clientY - startY;
+            imageElement.style.left = `${initialX + dx}px`;
+            imageElement.style.top = `${initialY + dy}px`;
+        }
+
+        const adjustImagePosition = () => {
+            imageElement.style.left = `calc(50% - ${imageElement.offsetWidth / 2}px)`;
+            imageElement.style.top = `calc(50% - ${imageElement.offsetHeight / 2}px)`;
+        };
+
+        imageElement.onload = adjustImagePosition;
+        window.addEventListener('resize', adjustImagePosition);
+
+        loadTimeline();
+    </script>
+</body>
+</html>

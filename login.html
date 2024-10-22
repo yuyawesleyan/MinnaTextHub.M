@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="position.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0; /* ヘッダーのパディングを調整 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin-top: 150px; /* ヘッダーの高さに合わせて調整 */
+            width: 100%;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%; /* 幅を90%にして余白を調整 */
+            max-width: 400px; /* 最大幅は400px */
+        }
+
+        form h1 {
+            font-size: 1.6em; /* フォントサイズを調整 */
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        form input {
+            margin: 10px 0;
+            padding: 12px; /* パディングを調整 */
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; 
+        }
+
+        form button {
+            margin-top: 15px; /* マージンを調整 */
+            padding: 12px; /* パディングを調整 */
+            font-size: 1.1em; /* フォントサイズを調整 */
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%; /* ボタン幅を100%に */
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        .nav-btn1 {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #ff7675;
+            border-radius: 10px;
+            background-color: #d63031;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%; /* 幅を100%に */
+        }
+
+        .nav-btn1:hover {
+            background-color: #ff7675;
+            border-color: #d63031;
+        }
+
+        .nav-btn1:active {
+            transform: scale(0.95);
+        }
+
+        .nav-btn1:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 118, 117, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 10px 0; /* ヘッダーのパディングを調整 */
+            }
+            form h1 {
+                font-size: 1.5em; /* ヘッダーのフォントサイズを調整 */
+            }
+            form input {
+                font-size: 0.9em; /* 入力フィールドのフォントサイズを調整 */
+            }
+            form button {
+                font-size: 1em; /* ボタンのフォントサイズを調整 */
+            }
+            .nav-btn1 {
+                font-size: 14px; /* ナビゲーションボタンのフォントサイズを調整 */
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 8px 0; /* ヘッダーのパディングを調整 */
+            }
+            form h1 {
+                font-size: 1.3em; /* ヘッダーのフォントサイズを調整 */
+            }
+            form input {
+                font-size: 0.8em; /* 入力フィールドのフォントサイズを調整 */
+            }
+            form button {
+                font-size: 0.9em; /* ボタンのフォントサイズを調整 */
+            }
+            .nav-btn1 {
+                font-size: 12px; /* ナビゲーションボタンのフォントサイズを調整 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ログイン</h1>
+    </header>
+    <main>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="メールアドレス" required>
+            <input type="password" id="password" placeholder="パスワード" required>
+            <button type="submit">ログイン</button>
+            <button class="nav-btn1" onclick="location.href='support.html'">私はパスワードを忘れました</button>
+        </form>
+    </main>
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js';
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDN9KQ50hwjlzFNc26aMOCS0H06JwggY68",
+            authDomain: "honkoku-hiroba-21400.firebaseapp.com",
+            projectId: "honkoku-hiroba-21400",
+            storageBucket: "honkoku-hiroba-21400.appspot.com",
+            messagingSenderId: "909469448032",
+            appId: "1:909469448032:web:8c62f7f2a978c711cd9005",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = 'member.html';
+            } catch (error) {
+                alert(`エラー: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>
