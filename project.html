@@ -10,16 +10,16 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #000428; /* 固定背景色 */
+            background-color: #000428; 
             color: #fff;
             margin: 0;
-            padding: 10px; /* 余白を調整 */
+            padding: 10px; 
             overflow-x: hidden;
         }
 
         h1 {
             margin-bottom: 20px;
-            font-size: 32px; /* フォントサイズを調整 */
+            font-size: 32px; 
             color: #e0e0e0;
             text-align: center;
             text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -34,8 +34,8 @@
         .gallery, #image-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px; /* スペースを調整 */
-            justify-content: center; /* 中央揃えに変更 */
+            gap: 15px; 
+            justify-content: center; 
             opacity: 0;
             animation: fadeIn 2s ease-in-out 1.5s forwards;
         }
@@ -52,8 +52,7 @@
             border: 1px solid transparent;
             transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
             cursor: pointer;
-            width: calc(100% - 30px); /* 幅を100%に設定 */
-            max-width: 300px;
+            width: calc(100% - 30px); 
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
@@ -66,8 +65,8 @@
         }
 
         .folder-info {
-            padding: 15px; /* パディングを調整 */
-            font-size: 18px; /* フォントサイズを調整 */
+            padding: 15px; 
+            font-size: 18px; 
             text-align: center;
             font-weight: 500;
             color: #00d4ff;
@@ -77,8 +76,8 @@
 
         .image-list-header {
             width: 100%;
-            padding: 15px; /* パディングを調整 */
-            font-size: 20px; /* フォントサイズを調整 */
+            padding: 15px; 
+            font-size: 20px;
             font-weight: 600;
             background-color: rgba(0, 0, 0, 0.6);
             color: #00d4ff;
@@ -89,13 +88,13 @@
         }
 
         .image-card img {
-            width: 100%; /* 画像の幅を100%に設定 */
+            width: 100%; 
             height: auto;
             object-fit: cover;
             border-bottom: 2px solid #00d4ff;
             opacity: 0.9;
             transition: opacity 0.3s ease;
-            display: block; /* 画像をブロック要素に */
+            display: block; 
         }
 
         .image-card img:hover {
@@ -103,9 +102,9 @@
         }
 
         .image-name {
-            padding: 10px; /* パディングを調整 */
+            padding: 10px; 
             text-align: center;
-            font-size: 14px; /* フォントサイズを調整 */
+            font-size: 14px; 
             font-weight: 500;
             color: #00d4ff;
         }
@@ -113,12 +112,12 @@
         .button-container {
             display: flex;
             justify-content: center;
-            margin: 30px 0; /* マージンを調整 */
+            margin: 30px 0; 
         }
 
         .button {
-            padding: 10px 25px; /* パディングを調整 */
-            font-size: 16px; /* フォントサイズを調整 */
+            padding: 10px 25px; 
+            font-size: 16px; 
             cursor: pointer;
             border: none;
             border-radius: 10px;
@@ -138,19 +137,19 @@
 
         @media (min-width: 768px) {
             .folder-card, .image-card {
-                width: calc(50% - 40px); /* PC版用の幅設定を50%に */
+                width: calc(50% - 40px); 
             }
 
             h1 {
-                font-size: 42px; /* PC版用のフォントサイズ */
+                font-size: 42px; 
             }
 
             .button {
-                font-size: 18px; /* PC版用のフォントサイズ */
+                font-size: 18px; 
             }
 
             .folder-info, .image-name {
-                font-size: 20px; /* PC版用のフォントサイズ */
+                font-size: 20px; 
             }
         }
 

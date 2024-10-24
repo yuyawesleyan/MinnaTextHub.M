@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="position.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像アップロード</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 15px; 
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 24px;
+            font-size: 24px;
+            color: #444;
+            text-align: center;
+        }
+
+        .folder-options {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        select, input[type="text"] {
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 12px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #upload-status {
+            margin-top: 16px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #back-button {
+            background-color: #6c757d;
+        }
+
+        #back-button:hover {
+            background-color: #5a6268;
+        }
+
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px; 
+            }
+
+            .container {
+                padding: 20px; 
+            }
+
+            button {
+                font-size: 14px; 
+            }
+
+            select, input[type="text"] {
+                font-size: 14px; 
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 18px; 
+            }
+
+            button {
+                font-size: 12px; 
+            }
+
+            select, input[type="text"] {
+                font-size: 12px; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>画像アップロード</h1>
+
+        <div class="folder-options">
+            <label for="existing-folder">既存フォルダを選択</label>
+            <select id="existing-folder">
+                <option value="">既存フォルダを選択</option>
+            </select>
+
+            <label for="new-folder-input">新規フォルダ名を入力</label>
+            <input type="text" id="new-folder-input" placeholder="新規フォルダ名">
+            <button id="new-folder">新規フォルダ作成</button>
+        </div>
+
+        <div class="upload-section">
+            <input type="file" id="file-upload" multiple>
+            <button id="upload-button">アップロード</button>
+            <p id="upload-status"></p>
+        </div>
+
+        <button id="back-button">戻る</button>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js';
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-storage.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDN9KQ50hwjlzFNc26aMOCS0H06JwggY68",
+            authDomain: "honkoku-hiroba-21400.firebaseapp.com",
+            projectId: "honkoku-hiroba-21400",
+            storageBucket: "honkoku-hiroba-21400.appspot.com",
+            messagingSenderId: "909469448032",
+            appId: "1:909469448032:web:8c62f7f2a978c711cd9005",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        // 既存フォルダを取得して表示
+        const existingFolderSelect = document.getElementById('existing-folder');
+        const listFolders = async () => {
+            const rootRef = ref(storage);
+            try {
+                const result = await listAll(rootRef);
+                result.prefixes.forEach((folderRef) => {
+                    const option = document.createElement('option');
+                    option.value = folderRef.name;
+                    option.textContent = folderRef.name;
+                    existingFolderSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error listing folders:", error);
+            }
+        };
+
+        listFolders();
+
+        document.getElementById('upload-button').addEventListener('click', async function() {
+            const files = document.getElementById('file-upload').files;
+            const status = document.getElementById('upload-status');
+            const newFolderName = document.getElementById('new-folder-input').value.trim();
+            const folder = newFolderName || document.getElementById('existing-folder').value || "default-folder";
+
+            if (files.length === 0) {
+                status.textContent = "画像が選択されていません。";
+                status.style.color = "red";
+                return;
+            }
+
+            status.textContent = "アップロード中...";
+            status.style.color = "blue";
+
+            try {
+                const uploadPromises = Array.from(files).map(file => {
+                    const storageRef = ref(storage, `${folder}/${file.name}`);
+                    const uploadTask = uploadBytesResumable(storageRef, file);
+
+                    return new Promise((resolve, reject) => {
+                        uploadTask.on('state_changed', 
+                            null, 
+                            (error) => reject(error), 
+                            () => getDownloadURL(uploadTask.snapshot.ref).then(resolve)
+                        );
+                    });
+                });
+
+                const urls = await Promise.all(uploadPromises);
+                status.textContent = "アップロードが完了しました！";
+                status.style.color = "green";
+                console.log("Uploaded files:", urls);
+            } catch (error) {
+                status.textContent = `エラーが発生しました: ${error.message}`;
+                status.style.color = "red";
+                console.error("Upload error:", error);
+            }
+        });
+
+        document.getElementById('new-folder').addEventListener('click', function() {
+            const newFolderInput = document.getElementById('new-folder-input');
+            const newFolder = newFolderInput.value.trim();
+            if (newFolder) {
+                const option = document.createElement("option");
+                option.value = newFolder;
+                option.textContent = newFolder;
+                document.getElementById('existing-folder').appendChild(option);
+                document.getElementById('existing-folder').value = newFolder;
+                newFolderInput.value = "";
+            } else {
+                alert("新規フォルダ名を入力してください。");
+            }
+        });
+
+        document.getElementById('back-button').addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>

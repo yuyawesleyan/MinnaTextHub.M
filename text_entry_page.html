@@ -11,17 +11,17 @@
             background-color: #f0f2f5;
             margin: 0;
             padding: 20px;
-            overflow: auto; /* 全体がスクロール可能に */
+            overflow: auto; 
         }
 
         .container {
             display: flex;
-            flex-direction: row; /* 横に並ぶように変更 */
+            flex-direction: row; 
             gap: 20px;
         }
 
         .text-entry {
-            flex: 1; /* 入力エリアが可能な限り広がる */
+            flex: 1; 
             font-size: 15px;
             background-color: #fff;
             border-radius: 8px;
@@ -35,12 +35,12 @@
             overflow: hidden;
             background-color: #ddd;
             border-radius: 8px;
-            height: 100vh; /* モバイルに合わせて高さを調整 */
+            height: 100vh; 
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-shrink: 0; /* 画像エリアが縮まないように */
-            width: 300px; /* 画像エリアの幅を固定 */
+            flex-shrink: 0;
+            width: 300px; 
         }
 
         .image-container img {
@@ -128,7 +128,7 @@
             color: #fff;
             background-color: #007bff;
             transition: background-color 0.3s;
-            width: 100%; /* ボタンを全幅にする */
+            width: 100%; 
         }
 
         .button:hover {
@@ -159,14 +159,14 @@
             box-sizing: border-box;  
         }
 
-        /* モバイル用のスタイル */
+        
         @media (max-width: 600px) {
             .image-container {
-                height: 40vh; /* モバイルでの高さを調整 */
-                width: 100%; /* モバイルで幅を全幅に */
+                height: 40vh;
+                width: 100%; 
             }
             .text-entry {
-                padding: 10px; /* パディングを調整 */
+                padding: 10px; 
             }
         }
     </style>
